@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "outDir": "./compiledJS/",
+        "strict": false,
+        "strictFunctionTypes": false
+    },
+    "include": [
+        "*.ts",
+        "global.d.ts"
+    ]
+}
