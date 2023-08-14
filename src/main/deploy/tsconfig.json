@@ -5,7 +5,8 @@
         "strictFunctionTypes": false
     },
     "include": [
-        "*.ts",
+        "main.ts",
         "global.d.ts"
-    ]
+    ],
+    
 }

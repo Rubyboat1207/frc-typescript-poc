@@ -6,6 +6,9 @@ import java.util.List;
 import com.caoccao.javet.exceptions.JavetException;
 import com.caoccao.javet.values.V8Value;
 import com.caoccao.javet.values.reference.V8ValueFunction;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class JSRobotUtil {
     static List<V8ValueFunction> occurPeriodically = new ArrayList<>();
@@ -23,5 +26,9 @@ public class JSRobotUtil {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static WPI_TalonFX fromMotorController(MotorController motorController) {
+        return (WPI_TalonFX) motorController;
     }
 }

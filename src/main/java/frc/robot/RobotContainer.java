@@ -10,11 +10,8 @@ import com.caoccao.javet.interop.V8Host;
 import com.caoccao.javet.interop.V8Runtime;
 import com.caoccao.javet.interop.converters.JavetProxyConverter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.JSInterop.JSCommandWrapper;
 import frc.robot.JSInterop.JSRobotUtil;
-import frc.robot.JSInterop.JSSubsystemWrapper;
+import frc.robot.JSInterop.ProxyConversion;
 
 
 
@@ -28,13 +25,8 @@ public class RobotContainer {
       runtime.setConverter(new JavetProxyConverter());
       new JavetStandardConsoleInterceptor(runtime).register(runtime.getGlobalObject());
 
-
-      runtime.getGlobalObject().set("JSCommandWrapper", JSCommandWrapper.class);
-      runtime.getGlobalObject().set("JSSubsystemWrapper", JSSubsystemWrapper.class);
-      runtime.getGlobalObject().set("SmartDashboard", SmartDashboard.class);
-      runtime.getGlobalObject().set("CommandXboxController", CommandXboxController.class);
-      runtime.getGlobalObject().set("CommandXboxController", CommandXboxController.class);
-      runtime.getGlobalObject().set("RobotUtil", JSRobotUtil.class);
+      ProxyConversion.register(runtime.getGlobalObject());
+      
     }catch(Exception e) {
       e.printStackTrace();
       System.out.println("V8 RUNTIME FAILED TO START, PLEASE REBOOT");
