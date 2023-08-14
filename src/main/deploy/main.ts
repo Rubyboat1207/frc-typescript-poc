@@ -54,19 +54,22 @@ class RobotContainer {
 type JoystickProvider = () => {driverX: number, driverY: number};
 
 class DriveCommand implements CommandBase {
-    
-    addRequirements?: (requirements: JSSubsystemWrapper[]) => void;
+    addRequirements?: (requirements: JSSubsystemWrapper[]) => void
     getMove: JoystickProvider;
     getRotation: () => number;
     drivebase: Drivebase;
+    requirements: JSSubsystemWrapper[];
 
     constructor(systems: Systems, getMove: JoystickProvider, getRotation: () => number) {
         this.getMove = getMove;
         this.getRotation = getRotation;
-
-        this.addRequirements([systems.drivebase]);
-
         this.drivebase = systems.getDrivebase();
+
+        this.requirements = [systems.drivebase]
+    }
+
+    setRequirements(): void {
+        this.addRequirements(this.requirements);
     }
 
     initialize(): void {
@@ -77,7 +80,9 @@ class DriveCommand implements CommandBase {
         return false;
     }
     execute(): void {
+        console.log('Drive')
         const move = this.getMove();
+        console.log(this.drivebase);
         this.drivebase.drive(new ChassisSpeeds(move.driverX, move.driverY, this.getRotation()))
     }
     end(interrupted: boolean): void {
@@ -178,6 +183,7 @@ class Drivebase implements SubsystemBase{
     }
 
     drive(chassisSpeeds: ChassisSpeeds) {
+        console.log(`Driving with: ${chassisSpeeds.vxMetersPerSecond}, ${chassisSpeeds.vyMetersPerSecond}`)
         const mod = new ChassisSpeeds(
             chassisSpeeds.vxMetersPerSecond,
             chassisSpeeds.vyMetersPerSecond,
@@ -286,7 +292,8 @@ class Systems {
     }
 
     getDrivebase() {
-        return this.drivebase.subsystem as Drivebase;
+        console.log(this.drivebase)
+        return this.drivebase.baseObject as Drivebase;
     }
 }
 

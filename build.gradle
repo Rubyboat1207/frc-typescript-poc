@@ -122,6 +122,6 @@ tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
 
-tasks.named('compileJava').configure {
-    dependsOn runTsc
-}
+// tasks.named('compileJava').configure {
+//     dependsOn runTsc
+// }

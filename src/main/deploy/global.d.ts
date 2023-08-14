@@ -5,17 +5,18 @@ declare class JSCommandWrapper implements JCommand {
 }
 
 declare class JSSubsystemWrapper {
-    subsystem: SubsystemBase;
+    baseObject: SubsystemBase;
     static registerSubsystem(subsystem: SubsystemBase): JSSubsystemWrapper;
     setDefaultCommand(command: JCommand)
 }
 
 declare interface CommandBase {
-    addRequirements?: (requirements: JSSubsystemWrapper[]) => void;
+    addRequirements?: (requirements: JSSubsystemWrapper[]) => void
     initialize(): void;
     isFinished(): boolean;
     execute(): void;
     end(interrupted: boolean): void;
+    setRequirements(): void;
 }
 
 declare interface SubsystemBase {

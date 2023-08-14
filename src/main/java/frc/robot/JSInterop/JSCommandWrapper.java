@@ -2,11 +2,17 @@ package frc.robot.JSInterop;
 
 import com.caoccao.javet.exceptions.JavetException;
 import com.caoccao.javet.interfaces.IJavetUniConsumer;
+import com.caoccao.javet.interop.callback.IJavetDirectCallable;
+import com.caoccao.javet.interop.callback.JavetCallbackContext;
+import com.caoccao.javet.interop.callback.JavetCallbackType;
 import com.caoccao.javet.values.V8Value;
 import com.caoccao.javet.values.reference.V8ValueArray;
 import com.caoccao.javet.values.reference.V8ValueObject;
+import com.caoccao.javet.values.reference.V8ValueProxy;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class JSCommandWrapper extends CommandBase {
     public V8ValueObject baseObject;
@@ -15,7 +21,28 @@ public class JSCommandWrapper extends CommandBase {
         try {
             this.baseObject = base.toClone();
             this.baseObject.clearWeak();
-            this.baseObject.set("addRequirements", addRequirements);
+            this.baseObject.bindFunction(new JavetCallbackContext("addRequirements", JavetCallbackType.DirectCallSetterAndNoThis, new IJavetDirectCallable.SetterAndNoThis<Exception>() {
+                @Override
+                public V8Value set(V8Value v8ValueValue) throws JavetException, Exception {
+                    if (v8ValueValue instanceof V8ValueArray) {
+                        V8ValueArray v8Array = (V8ValueArray) v8ValueValue;
+                
+                        for (int i = 0; i < v8Array.getLength(); i++) {
+                            V8ValueProxy item = (V8ValueProxy) v8Array.get(i);
+
+                            var subsystem = RobotContainer.runtime.getConverter().toObject(item);
+
+                            if(subsystem instanceof SubsystemBase) {
+                                addRequirements((SubsystemBase) subsystem);
+                            }
+                        }
+                    }
+                    return null;
+                }
+                
+            }));
+            baseObject.invokeVoid("setRequirements", (V8Value) null);
+
         }catch(Exception e) {
             e.printStackTrace();
         }
