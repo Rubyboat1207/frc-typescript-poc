@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class JSSubsystemWrapper extends SubsystemBase {
 
-    public final V8ValueObject subsystem;
+    public V8ValueObject subsystem;
 
     public JSSubsystemWrapper(V8ValueObject subsystem) {
-        this.subsystem = subsystem;
         try {
-            subsystem.invokeVoid("subsysInit", this);
+            this.subsystem = subsystem.toClone();
+            this.subsystem.invokeVoid("subsysInit", this);
         } catch (JavetException e) {
             e.printStackTrace();
         }
@@ -24,5 +24,13 @@ public class JSSubsystemWrapper extends SubsystemBase {
         return commandWrapper;
     }
 
+    @Override
+    public void periodic() {
+        try {
+            subsystem.invokeVoid("periodic", this);
+        } catch (JavetException e) {
+            e.printStackTrace();
+        }
+    }
     
 }

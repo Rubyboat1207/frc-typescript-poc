@@ -291,3 +291,4 @@ class Systems {
 }
 
 const robotContainer = new RobotContainer();
+robotContainer.main()

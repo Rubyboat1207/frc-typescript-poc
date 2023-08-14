@@ -54,6 +54,6 @@ public class ProxyConversion {
     }
 
     private static void registerSimple(Class<?> clazz) throws JavetException {
-        global.set(clazz.getName(), clazz);
+        global.set(clazz.getSimpleName(), clazz);
     }
 }
